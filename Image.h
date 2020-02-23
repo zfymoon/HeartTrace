@@ -21,16 +21,39 @@ class Image {
 private:
     vector<vector<Pixel>> pixels;
 public:
-    unsigned width;
-    unsigned height;
-    Image(unsigned w, unsigned h){
+    double width;
+    double height;
+    Image(double w, double h){
         width = w;
         height = h;
         pixels = vector<vector<Pixel>>(w,vector<Pixel>(h));
     }
-    void setPixel(const Pixel & pixel, unsigned x, unsigned y){
+    void setPixel(const Pixel & pixel, double x, double y){
         if(x < width && y < height  ){
             pixels[x][y] = pixel;
+        }
+    }
+    Image reverse(){
+        Image result(width,height);
+        for(int i=0;i<width;i++){
+            for(int j=0;j<height;j++){
+                result.setPixel(pixels[j][i],i,j);
+            }
+        }
+        return result;
+    }
+    
+    void print(){
+        for(int i=0;i<width;i++){
+            cout<<endl;
+            for(int j=0;j<height;j++){
+                Pixel pixel = pixels[i][j];
+                if(pixel.R == 255 && pixel.G == 255 && pixel.B == 255){
+                    cout<<"# ";
+                } else{
+                    cout<<"@ ";
+                }
+            }
         }
     }
     void exportToFile(const string & path){

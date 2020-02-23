@@ -94,7 +94,6 @@ public:
     Matrix<T> Invert(){
         Matrix<T> result= Adjugate();
         double value = det();
-        //result.dump();
         for(int i=0;i<width;i++){
             for(int j=0;j<height;j++){
                 result[i][j] = result[i][j] / (value + 0.0);
@@ -163,6 +162,9 @@ public:
         if(detCacheFlag){
             return detCache;
         }
+        if(this->width == 1 && this->height == 1){
+            return vectors[0][0];
+        }
         if(this->width == 2 && this->height == 2){
             return vectors[0][0]*vectors[1][1] - vectors[0][1]*vectors[1][0];
         }
@@ -213,6 +215,16 @@ public:
         }
         return result;
     }
+
+    static Vec<T> point(Vec<T> vec,Matrix<T> matrix){
+        Vec<T> result(vector<T>(vec.size()));
+        if(vec.size() == matrix.height){
+            for(int i=0;i<vec.size();i++){
+                result[i] = vec * matrix.column(i);
+            }
+        }
+        return result;
+    }
     static void test(){
         
         //测试LU分解
@@ -250,8 +262,23 @@ public:
         };
         invertMatrix.Invert().dump();
         invertMatrix.LUInvert().dump();
+        
+        //测试向量左乘矩阵
+        
+        
+        Matrix<double > in = {
+                {1,0},
+                {0,-1}
+        };
+    
+        point(
+                Vec<double>{1, 1},
+                in.Invert()).dump();
+     
+        
+        cout<<in.det()<<endl;
+        
+        
     }
-    
-    
 };
 #endif //HEARTTRACE_MATRIX_H

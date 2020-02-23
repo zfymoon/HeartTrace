@@ -59,7 +59,6 @@ public:
         }
         return result;
     }
-    
     T & operator[](unsigned position){
         return items[position];
     }
