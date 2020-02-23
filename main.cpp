@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Image.h"
 #include "Matrix.h"
+#include "Vec.h"
+#include <stack>
 
 
 Pixel shader(unsigned x, unsigned y){
@@ -20,16 +22,16 @@ int main() {
         }
     }
     
-    image.exportToFile(string("./test.png"));
+   Matrix<int >::test();
     
-    Matrix<unsigned> matrix(2,2);
-    matrix.setItem(1,0,0);
-    matrix.setItem(2,0,1);
-    matrix.setItem(1,1,0);
-    matrix.setItem(1,1,1);
-    matrix.dump();
-    Matrix<unsigned> next = matrix * matrix;
-    next.dump();
+   // (e * matrix).dump();
+   
+   
+    
+    //求第一个消元矩阵
+    
+    image.exportToFile(string("./test.png"));
+   
     
     return 0;
 }
