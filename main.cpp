@@ -19,11 +19,7 @@ Pixel shader(double x, double y, double centerX, double centerY, double r){
     }
 }
 int main() {
-    
-    
-    
     Image image(100,100);
-    
     Matrix<double > imageTransMatrix = {
             {1,0,0},
             {0,-1,image.height},
