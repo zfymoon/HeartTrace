@@ -264,21 +264,14 @@ public:
         invertMatrix.LUInvert().dump();
         
         //测试向量左乘矩阵
-        
-        
         Matrix<double > in = {
                 {1,0},
                 {0,-1}
         };
-    
         point(
                 Vec<double>{1, 1},
                 in.Invert()).dump();
-     
-        
         cout<<in.det()<<endl;
-        
-        
     }
 };
 #endif //HEARTTRACE_MATRIX_H

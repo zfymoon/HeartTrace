@@ -45,7 +45,6 @@ public:
     
     void print(){
         for(int i=0;i<width;i++){
-            cout<<endl;
             for(int j=0;j<height;j++){
                 Pixel pixel = pixels[i][j];
                 if(pixel.R == 255 && pixel.G == 255 && pixel.B == 255){
@@ -54,6 +53,7 @@ public:
                     cout<<"@ ";
                 }
             }
+            cout<<endl;
         }
     }
     void exportToFile(const string & path){

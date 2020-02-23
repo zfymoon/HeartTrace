@@ -29,10 +29,9 @@ int main() {
             {0,-1,image.height},
             {0,0,0}
     };
+    //行向量右乘，所以需要转置
     imageTransMatrix = imageTransMatrix.TFunc();
-    
     for(double i = 0;i<=image.width;i++){
-        cout<<endl;
         for(double j = 0;j<=image.height;j++){
             Vec<double > tmpVec = Matrix<double >::point(Vec<double >{
                     {i + 0.0,j+0.0,1}
