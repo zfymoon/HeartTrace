@@ -9,11 +9,15 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
 template<class T>
 class Matrix{
+private:
+    double  detCache = 0;
+    bool detCacheFlag = false;
 public:
     unsigned width;
     unsigned height;
@@ -83,9 +87,20 @@ public:
             cout<<"]"<<endl;
         }
     }
-    
-    Matrix<T> invert(){
-    
+    /**
+     * 逆矩阵
+     * @return
+     */
+    Matrix<T> Invert(){
+        Matrix<T> result= Adjugate();
+        double value = det();
+        //result.dump();
+        for(int i=0;i<width;i++){
+            for(int j=0;j<height;j++){
+                result[i][j] = result[i][j] / (value + 0.0);
+            }
+        }
+        return result;
     }
     //获取单位矩阵
     Matrix<T> e(){
@@ -127,6 +142,12 @@ public:
         }
         return pair<Matrix<T>,Matrix<T>>(lResult,matrix);
     }
+    Matrix<T> LUInvert(){
+        pair<Matrix<T>,Matrix<T>> luResult = LU();
+        Matrix<T> lInvert = luResult.first.Invert();
+        Matrix<T> uInvert = luResult.second.Invert();
+        return uInvert * lInvert;
+    }
     void LUDump(){
         pair<Matrix<int>,Matrix<int>> r = LU();
         cout<<"L :"<<endl;
@@ -134,14 +155,103 @@ public:
         cout<<"U :"<<endl;
         r.second.dump();
     }
+    /**
+     * 计算行列式
+     * @return
+     */
+    double det(){
+        if(detCacheFlag){
+            return detCache;
+        }
+        if(this->width == 2 && this->height == 2){
+            return vectors[0][0]*vectors[1][1] - vectors[0][1]*vectors[1][0];
+        }
+        double result = 0;
+        for(int i=0;i<width;i++){
+            T tmpValue = vectors[0][i];
+            result += tmpValue == 0 ? 0 : pow(-1,i+2)*tmpValue *  M(0,i).det();
+        }
+        detCacheFlag = true;
+        detCache = result;
+        return result;
+    }
+    /**
+     * 转置矩阵
+     * @return
+     */
+    Matrix<T> TFunc(){
+        Matrix<T> result(height,width);
+        for(int i=0;i<result.width;i++){
+            for(int j=0;j<result.height;j++){
+                result[i][j] = vectors[j][i];
+            }
+        }
+        return result;
+    }
+    /**
+     * 伴随矩阵
+     * @return
+     */
+    Matrix<T> Adjugate(){
+        Matrix<T> result(width,height);
+        for(int i=0;i<width;i++){
+            for(int j=0;j<height;j++){
+                result[i][j] = pow(-1,i+j+2) * M(i,j).det();
+            }
+        }
+        return result.TFunc();
+    }
+    Matrix<T> M(unsigned positionX, unsigned positionY){
+        Matrix<T> result(width-1,height-1);
+        for(int i=0;i<width;i++){
+            for(int j=0;j<height;j++){
+                if(i != positionX && j != positionY ){
+                    result[i >= positionX ? i-1 : i][ j >= positionY ? j-1 :j]
+                    = vectors[i][j];
+                }
+            }
+        }
+        return result;
+    }
     static void test(){
+        
+        //测试LU分解
         Matrix<int > matrix{
                 {1,2,3},
                 {2,5,7},
                 {3,5,3}
         };
-        matrix.dump();
         matrix.LUDump();
+        
+        //测试行列式
+        Matrix<int > detMatrix{
+                {5,-5,1,3,0},
+                {3,2,4,4,3},
+                {4,-1,-2,-3,2},
+                {0,-3,4,3,3},
+                {0,2,-2,2,4}
+        };
+        cout<<detMatrix.det()<<endl;
+        
+        //测试伴随矩阵
+        Matrix<int > adjMatrix{
+                {-3,2,-5},
+                {-1,0,-2},
+                {3,-4,1}
+        
+        };
+        adjMatrix.Adjugate().dump();
+        
+        //测试逆矩阵
+        Matrix<double > invertMatrix = {
+                {1,4,3},
+                {-1,-2,0},
+                {2,2,3}
+        };
+        invertMatrix.Invert().dump();
+        invertMatrix.LUInvert().dump();
     }
+    
+    
 };
 #endif //HEARTTRACE_MATRIX_H
