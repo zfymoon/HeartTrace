@@ -1,9 +1,9 @@
 #include <iostream>
 #include "Image.h"
-#include "Matrix.h"
-#include "Vec.h"
+#include "matrix/Matrix.h"
+#include "matrix/Vec.h"
 #include <cmath>
-#include <stack>
+
 
 //对图片坐标进行转换
 
@@ -19,7 +19,7 @@ Pixel shader(double x, double y, double centerX, double centerY, double r){
     }
 }
 int main() {
-    Image image(100,100);
+    Image image(4096,4096);
     Matrix<double > imageTransMatrix = {
             {1,0,0},
             {0,-1,image.height},
@@ -32,16 +32,11 @@ int main() {
             Vec<double > tmpVec = Matrix<double >::point(Vec<double >{
                     {i + 0.0,j+0.0,1}
             },imageTransMatrix);
-            Pixel pixel = shader(tmpVec[0],tmpVec[1],8.0,7.0,5.0);
+            Pixel pixel = shader(tmpVec[0],tmpVec[1],700,700,500);
             image.setPixel(pixel,i,j);
         }
     }
     image.reverse().print();
-    
-    //求图片坐标在原始坐标下对应的坐标向量
-   
-  
-   
     
     return 0;
 }

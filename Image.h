@@ -9,6 +9,11 @@
 #include <iostream>
 #include <fstream>
 
+/**
+ * 图片输出为PPM P3格式，便于阅读
+ * 格式：P3 w h max_color [r g b] [r g b] ...
+ */
+
 using namespace std;
 
 struct Pixel{
@@ -44,17 +49,8 @@ public:
     }
     
     void print(){
-        for(int i=0;i<width;i++){
-            for(int j=0;j<height;j++){
-                Pixel pixel = pixels[i][j];
-                if(pixel.R == 255 && pixel.G == 255 && pixel.B == 255){
-                    cout<<"# ";
-                } else{
-                    cout<<"@ ";
-                }
-            }
-            cout<<endl;
-        }
+        exportToFile("./m.png");
+        
     }
     void exportToFile(const string & path){
         ofstream  fs;
@@ -66,8 +62,13 @@ public:
             cerr<<"Can not open file"<<endl;
         }
         //write width height
-        fs.write(to_string(0x4d42).c_str(),1);
-        fs.write(to_string(width * height).c_str(),1);
+        fs<<"P3 "<<width<<" "<<height<<" 255 ";
+        for(int i=0;i<width;i++){
+            for(int j=0;j<height;j++){
+                Pixel pixel = pixels[i][j];
+                fs<<pixel.R<<" "<<pixel.G<<" "<<pixel.B<<" ";
+            }
+        }
         fs.flush();
     }
 };
