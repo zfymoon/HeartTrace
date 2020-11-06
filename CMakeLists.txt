@@ -3,4 +3,4 @@ project(HeartTrace)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(HeartTrace main.cpp Image.h matrix/Matrix.h matrix/Vec.h common/Log.h)
+add_executable(HeartTrace main.cpp Image.h matrix/Matrix.h matrix/Vec.h common/Log.h zhuque/Matrix.h)
